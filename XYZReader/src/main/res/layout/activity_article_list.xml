@@ -21,11 +21,13 @@
             android:paddingBottom="28dp" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
+
+    <!--android:background="?colorPrimary"-->
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="112dp"
-        android:background="?colorPrimary"
+        android:background="@color/theme_primary"
         android:elevation="8dp">
 
         <android.support.v7.widget.Toolbar
