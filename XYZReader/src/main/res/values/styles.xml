@@ -16,7 +16,6 @@
 -->
 
 <resources>
-
     <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:colorPrimary">@color/theme_primary</item>
         <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
@@ -26,4 +25,19 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="List_item_article_title">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:textColor">@color/ltgray</item>
+        <item name="android:textSize">@dimen/text_size_body1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="List_item_artile_subtitle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/ltgray</item>
+        <item name="android:textSize">@dimen/text_size_caption</item>
+    </style>
 </resources>
