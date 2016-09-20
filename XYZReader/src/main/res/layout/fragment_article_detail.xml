@@ -1,6 +1,7 @@
 <com.example.xyzreader.ui.DrawInsetsFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/draw_insets_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,41 +18,28 @@
             <FrameLayout
                 android:id="@+id/photo_container"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:background="@color/photo_placeholder">
                 <!--suppress AndroidLintContentDescription -->
 
                 <com.example.xyzreader.ui.DynamicHeightNetworkImageView
                     android:id="@+id/photo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:background="@color/photo_placeholder"
                     android:scaleType="centerCrop"/>
 
-                <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:background="@drawable/photo_background_protection"/>-->
-
-            </FrameLayout>
-
-            <com.example.xyzreader.ui.MaxWidthLinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/detail_card_top_margin"
-                android:background="#fff"
-                android:elevation="2dp"
-                android:maxWidth="@dimen/detail_card_max_width"
-                android:orientation="vertical">
+                <View
+                    android:id="@+id/meta_scrim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/photo_placeholder"/>
 
                 <LinearLayout
                     android:id="@+id/meta_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="@dimen/detail_metabar_vert_padding"
-                    android:background="#333"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/detail_metabar_vert_padding"
                     android:paddingLeft="@dimen/detail_inner_horiz_margin"
@@ -63,20 +51,34 @@
                         style="?android:attr/textAppearanceLarge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-condensed"
+                        android:fontFamily="sans-serif"
                         android:lineSpacingMultiplier="0.9"
                         android:paddingBottom="@dimen/detail_metabar_title_bottom_padding"
                         android:textColor="#fff"
                         android:textSize="@dimen/detail_title_text_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        tools:text="Article title"/>
 
                     <TextView
                         android:id="@+id/article_byline"
                         style="?android:attr/textAppearanceSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#8fff"/>
+                        android:textColor="#8fff"
+                        tools:text="Super subtitle"/>
                 </LinearLayout>
+            </FrameLayout>
+
+            <com.example.xyzreader.ui.MaxWidthLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="250dp"
+                android:background="#fff"
+                android:elevation="2dp"
+                android:maxWidth="@dimen/detail_card_max_width"
+                android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/article_body"
@@ -89,7 +91,8 @@
                     android:paddingBottom="@dimen/detail_body_bottom_margin"
                     android:textColor="@color/ltgray"
                     android:textColorLink="@color/theme_accent"
-                    android:textSize="@dimen/detail_body_text_size"/>
+                    android:textSize="@dimen/detail_body_text_size"
+                    tools:text="lorem"/>
 
             </com.example.xyzreader.ui.MaxWidthLinearLayout>
         </FrameLayout>
