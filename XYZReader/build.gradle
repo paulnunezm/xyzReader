@@ -16,7 +16,8 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        minSdkVersion 16
+        // TODO: change back to api 16
+        minSdkVersion 21
         targetSdkVersion 23
     }
 }
