@@ -26,5 +26,6 @@
     <color name="green_light">#56B005</color>
     <color name="photo_placeholder">#ccc</color>
     <color name="ltgray">#ffe0e0e0</color>
+    <color name="white">#fff</color>
 
 </resources>

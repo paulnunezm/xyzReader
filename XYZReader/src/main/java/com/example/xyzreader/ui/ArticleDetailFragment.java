@@ -1,10 +1,6 @@
 package com.example.xyzreader.ui;
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,12 +8,18 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -36,8 +38,8 @@ import static android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
-public class ArticleDetailFragment extends Fragment implements
-    LoaderManager.LoaderCallbacks<Cursor> {
+public class ArticleDetailFragment extends android.support.v4.app.Fragment implements
+    android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
   private static final String TAG = "ArticleDetailFragment";
 
   public static final  String ARG_ITEM_ID     = "item_id";
@@ -47,6 +49,8 @@ public class ArticleDetailFragment extends Fragment implements
   private long   mItemId;
   private View   mRootView;
   private int mMutedColor = 0xFF333333;
+  private String                mTitle;
+  private AppBarLayout          mAppBarLayout;
   private ObservableScrollView  mScrollView;
   private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
   private ColorDrawable         mStatusBarColorDrawable;
@@ -99,7 +103,9 @@ public class ArticleDetailFragment extends Fragment implements
     // the fragment's onCreate may cause the same LoaderManager to be dealt to multiple
     // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
     // we do this in onActivityCreated.
+//    getLoaderManager().initLoader(0, null, this);
     getLoaderManager().initLoader(0, null, this);
+
   }
 
   @Override
@@ -193,17 +199,37 @@ public class ArticleDetailFragment extends Fragment implements
       return;
     }
 
-    TextView titleView  = (TextView) mRootView.findViewById(R.id.article_title);
-    TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
+    Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
+     ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
+
+    ActionBar actionBar = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
+    actionBar.setDisplayHomeAsUpEnabled(true);
+
+//    getActivity().su
+//    getActivity().getSu
+
+    final CollapsingToolbarLayout collapsingToolbar =
+        (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_tool_bar);
+    final TextView titleView      = (TextView) mRootView.findViewById(R.id.article_title);
+    final View     titleContainer = mRootView.findViewById(R.id.title_container);
+    final TextView bylineView     = (TextView) mRootView.findViewById(R.id.article_byline);
 //    bylineView.setMovementMethod(new LinkMovementMethod());
     TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+    mAppBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
     bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
     if (mCursor != null) {
       mRootView.setAlpha(0);
       mRootView.setVisibility(View.VISIBLE);
       mRootView.animate().alpha(1);
-      titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+      mTitle = mCursor.getString(ArticleLoader.Query.TITLE);
+      titleView.setText(mTitle);
+//      titleView.setPivotY((titleView.getHeight()/8);
+//      collapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+
+      collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+      collapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
+
       bylineView.setText(Html.fromHtml(
           DateUtils.getRelativeTimeSpanString(
               mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
@@ -228,18 +254,22 @@ public class ArticleDetailFragment extends Fragment implements
               if (bitmap != null) {
                 Palette p = Palette.generate(bitmap, 12);
                 mMutedColor = p.getDarkMutedColor(0xFF333333);
+                int collapsingToolBarScrimColor = p.getMutedColor(getResources()
+                    .getColor(R.color.theme_primary));
 //                mPhotoView.setImageBitmap(imageContainer.getBitmap());  // Doesn't work!, why ?
 
 //                mRootView.findViewById(R.id.meta_bar)
 //                    .setBackgroundColor(mMutedColor);
 
                 // Create custom scrim using the muted color.
-                int              alphaColor = Color.argb(170, Color.red(mMutedColor), Color.green(mMutedColor), Color.blue(mMutedColor));
-                int[]            colors     = new int[]{Color.parseColor("#00000000"), alphaColor};
-                GradientDrawable gd         = new GradientDrawable(TOP_BOTTOM, colors);
-                mRootView.findViewById(R.id.meta_scrim).setBackgroundDrawable(gd);
+                int              alphaColor                     = Color.argb(170, Color.red(mMutedColor), Color.green(mMutedColor), Color.blue(mMutedColor));
+                int[]            colors                         = new int[]{Color.parseColor("#00000000"), alphaColor};
+                GradientDrawable gd                             = new GradientDrawable(TOP_BOTTOM, colors);
+                ColorDrawable    collapsingToolBarScrimDrawable = new ColorDrawable(collapsingToolBarScrimColor);
+                mRootView.findViewById(R.id.meta_scrim).setBackground(gd);
+                collapsingToolbar.setContentScrim(collapsingToolBarScrimDrawable);
 
-                updateStatusBar();
+//                updateStatusBar();
               }
             }
 
@@ -247,6 +277,22 @@ public class ArticleDetailFragment extends Fragment implements
             public void onErrorResponse(VolleyError volleyError) {
             }
           });
+
+      mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//          From : https://androidcot.wordpress.com/2015/12/07/android-collapsingtoolbarlayout-animation-header-fade-inout/
+          float percentage = ((float) Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
+          float value      = Math.abs(1 - percentage);
+
+          // Anumate views
+          animateAppLayoutViewsFromOffset(titleContainer, value);
+
+          // set title when collapsed
+          String text = (percentage == 1) ? mTitle : " ";
+          collapsingToolbar.setTitle(text);
+        }
+      });
 
     } else {
       mRootView.setVisibility(View.GONE);
@@ -257,12 +303,25 @@ public class ArticleDetailFragment extends Fragment implements
   }
 
   @Override
-  public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      // Respond to the action bar's Up/Home button
+      case android.R.id.home:
+        Log.d(TAG, "onOptionsItemSelected: ");
+//        NavUtils.navigateUpFromSameTask(getActivity());
+        ((AppCompatActivity) getActivity()).onSupportNavigateUp();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
     return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);
   }
 
   @Override
-  public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+  public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
     if (!isAdded()) {
       if (cursor != null) {
         cursor.close();
@@ -281,9 +340,44 @@ public class ArticleDetailFragment extends Fragment implements
   }
 
   @Override
-  public void onLoaderReset(Loader<Cursor> cursorLoader) {
+  public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
     mCursor = null;
     bindViews();
+  }
+
+
+//  @Override
+//  public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+//    if (!isAdded()) {
+//      if (cursor != null) {
+//        cursor.close();
+//      }
+//      return;
+//    }
+//
+//    mCursor = cursor;
+//    if (mCursor != null && !mCursor.moveToFirst()) {
+//      Log.e(TAG, "Error reading item detail cursor");
+//      mCursor.close();
+//      mCursor = null;
+//    }
+//
+//    bindViews();
+//  }
+
+//  @Override
+//  public void onLoaderReset(Loader<Cursor> cursorLoader) {
+//    mCursor = null;
+//    bindViews();
+//  }
+
+  public void animateAppLayoutViewsFromOffset(View view, float value) {
+    float scale = (value <= 0.8) ? 0.8f : value;
+    float alpha = (value > 0.7) ? value : (float) (value * 0.8);
+
+    view.setScaleX(scale);
+    view.setScaleY(scale);
+    view.setAlpha(alpha);
   }
 
   public int getUpButtonFloor() {
