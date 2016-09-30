@@ -10,6 +10,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +41,7 @@ import static android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends android.support.v4.app.Fragment implements
-    android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
+    LoaderManager.LoaderCallbacks<Cursor>, FragmentManager.OnBackStackChangedListener {
   private static final String TAG = "ArticleDetailFragment";
 
   public static final  String ARG_ITEM_ID     = "item_id";
@@ -200,13 +202,13 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     }
 
     Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
-     ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
+    ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
 
     ActionBar actionBar = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
+    actionBar.setHomeButtonEnabled(true);
 
-//    getActivity().su
-//    getActivity().getSu
+    getFragmentManager().addOnBackStackChangedListener(this); // listen to the backstack of the fragment manager
 
     final CollapsingToolbarLayout collapsingToolbar =
         (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_tool_bar);
@@ -389,5 +391,11 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     return mIsCard
         ? (int) mPhotoContainerView.getTranslationY() + mPhotoView.getHeight() - mScrollY
         : mPhotoView.getHeight() - mScrollY;
+  }
+
+  @Override
+  public void onBackStackChanged() {
+    Log.d(TAG, "onBackStackChanged: ");
+    ((AppCompatActivity) getActivity()).onSupportNavigateUp();
   }
 }
