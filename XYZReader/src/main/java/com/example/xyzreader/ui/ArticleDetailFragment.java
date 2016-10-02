@@ -12,7 +12,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -32,6 +31,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
+import com.example.xyzreader.ui.ArticleList.ArticleListActivity;
+import com.example.xyzreader.ui.utils.DrawInsetsFrameLayout;
+import com.example.xyzreader.ui.utils.DynamicHeightNetworkImageView;
+import com.example.xyzreader.ui.utils.ImageLoaderHelper;
+import com.example.xyzreader.ui.utils.ObservableScrollView;
 
 import static android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;
 
