@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.example.xyzreader.R;
@@ -31,6 +34,8 @@ public class ArticleListActivity extends ActionBarActivity implements
    android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
 
   private Toolbar            mToolbar;
+  private View               mLogo;
+  private AppBarLayout       mAppBarLayout;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private RecyclerView       mRecyclerView;
 
@@ -39,20 +44,19 @@ public class ArticleListActivity extends ActionBarActivity implements
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_article_list);
 
+    mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+    mLogo = findViewById(R.id.img_logo);
     mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
-//    final View toolbarContainerView = findViewById(R.id.toolbar_container);
-
     mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
     mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-//    getLoaderManager().initLoader(0, null, this);
+
     getSupportLoaderManager().initLoader(0, null, this);
 
     if (savedInstanceState == null) {
       refresh();
+//      introAnimation();
     }
+    introAnimation();
   }
 
   private void refresh() {
@@ -88,6 +92,25 @@ public class ArticleListActivity extends ActionBarActivity implements
     mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
   }
 
+  private void introAnimation(){
+    Resources res = getResources();
+    mAppBarLayout.setTranslationY(-res.getDimensionPixelSize(R.dimen.list_app_bar_layout_height));
+    mLogo.setTranslationY(-res.getDimension(R.dimen.list_logo_y_translation));
+
+    mAppBarLayout.animate()
+        .translationY(0)
+        .setStartDelay(300)
+        .setDuration(600)
+        .setInterpolator(new DecelerateInterpolator());
+    mLogo.animate()
+        .translationY(0)
+        .alpha(1)
+        .setStartDelay(900)
+        .setDuration(500)
+        .setInterpolator(new DecelerateInterpolator());
+
+  }
+
   @Override
   public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
     return ArticleLoader.newAllArticlesInstance(this);
@@ -110,21 +133,6 @@ public class ArticleListActivity extends ActionBarActivity implements
     mRecyclerView.setAdapter(null);
   }
 
-//  @Override
-//  public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//    Adapter adapter = new Adapter(cursor);
-//    adapter.setHasStableIds(true);
-//    mRecyclerView.setAdapter(adapter);
-//    int columnCount = getResources().getInteger(R.integer.list_column_count);
-//    StaggeredGridLayoutManager sglm =
-//        new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-//    mRecyclerView.setLayoutManager(sglm);
-//  }
-
-//  @Override
-//  public void onLoaderReset(Loader<Cursor> loader) {
-//    mRecyclerView.setAdapter(null);
-//  }
 
   private class Adapter extends RecyclerView.Adapter<ViewHolder> {
     private Cursor mCursor;

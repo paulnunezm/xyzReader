@@ -13,6 +13,7 @@
     <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
 
     <!--list-->
+    <dimen name="list_logo_y_translation">10dp</dimen>
     <dimen name="list_app_bar_layout_height">120dp</dimen>
 
 </resources>
