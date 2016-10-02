@@ -94,6 +94,7 @@ public class ArticleListActivity extends ActionBarActivity implements
 
   private void introAnimation(){
     Resources res = getResources();
+
     mAppBarLayout.setTranslationY(-res.getDimensionPixelSize(R.dimen.list_app_bar_layout_height));
     mLogo.setTranslationY(-res.getDimension(R.dimen.list_logo_y_translation));
 
@@ -101,13 +102,13 @@ public class ArticleListActivity extends ActionBarActivity implements
         .translationY(0)
         .setStartDelay(300)
         .setDuration(600)
-        .setInterpolator(new DecelerateInterpolator());
+        .setInterpolator(new DecelerateInterpolator(1.5f));
     mLogo.animate()
         .translationY(0)
         .alpha(1)
         .setStartDelay(900)
         .setDuration(500)
-        .setInterpolator(new DecelerateInterpolator());
+        .setInterpolator(new DecelerateInterpolator(1.5f);
   }
 
   @Override
