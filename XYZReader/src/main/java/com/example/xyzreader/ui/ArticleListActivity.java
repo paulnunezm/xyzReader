@@ -108,7 +108,6 @@ public class ArticleListActivity extends ActionBarActivity implements
         .setStartDelay(900)
         .setDuration(500)
         .setInterpolator(new DecelerateInterpolator());
-
   }
 
   @Override
