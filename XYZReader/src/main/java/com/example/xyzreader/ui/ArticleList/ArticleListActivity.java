@@ -1,4 +1,4 @@
-package com.example.xyzreader.ui.ArticleList;
+package com.example.xyzreader.ui.articleList;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,6 +47,7 @@ public class ArticleListActivity extends ActionBarActivity implements
     mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
     mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+    mRecyclerView.setItemAnimator(new ArticleItemAnimator());
     getSupportLoaderManager().initLoader(0, null, this);
 
     if (savedInstanceState == null) {
@@ -100,6 +101,7 @@ public class ArticleListActivity extends ActionBarActivity implements
         .setStartDelay(300)
         .setDuration(600)
         .setInterpolator(new DecelerateInterpolator(1.5f));
+
     mLogo.animate()
         .translationY(0)
         .alpha(1)

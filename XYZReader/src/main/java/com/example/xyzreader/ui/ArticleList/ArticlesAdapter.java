@@ -1,4 +1,4 @@
-package com.example.xyzreader.ui.ArticleList;
+package com.example.xyzreader.ui.articleList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +20,8 @@ import com.example.xyzreader.ui.utils.ImageLoaderHelper;
  * Created by paulnunez on 10/2/16.
  */
 
-public class ArticlesAdapter  extends RecyclerView.Adapter<ViewHolder> {
-  private Cursor mCursor;
+public class ArticlesAdapter  extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
+  private Cursor  mCursor;
   private Context mContext;
 
   public ArticlesAdapter(Cursor cursor, Context context) {
@@ -71,18 +71,20 @@ public class ArticlesAdapter  extends RecyclerView.Adapter<ViewHolder> {
   public int getItemCount() {
     return mCursor.getCount();
   }
-}
 
-class ViewHolder extends RecyclerView.ViewHolder {
-  public DynamicHeightNetworkImageView thumbnailView;
-  public TextView                      titleView;
-  public TextView                      subtitleView;
 
-  public ViewHolder(View view) {
-    super(view);
-    thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-    titleView = (TextView) view.findViewById(R.id.article_title);
-    subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+
+  public static class ViewHolder extends RecyclerView.ViewHolder {
+    DynamicHeightNetworkImageView thumbnailView;
+    TextView                      titleView;
+    TextView                      subtitleView;
+
+    public ViewHolder(View view) {
+      super(view);
+      thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
+      titleView = (TextView) view.findViewById(R.id.article_title);
+      subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+    }
   }
 }
 
