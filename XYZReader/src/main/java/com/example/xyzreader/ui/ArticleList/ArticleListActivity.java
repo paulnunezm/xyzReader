@@ -47,7 +47,7 @@ public class ArticleListActivity extends ActionBarActivity implements
     mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
     mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-    mRecyclerView.setItemAnimator(new ArticleItemAnimator());
+    mRecyclerView.setItemAnimator(new com.example.xyzreader.ui.articleList.ArticleItemAnimator());
     getSupportLoaderManager().initLoader(0, null, this);
 
     if (savedInstanceState == null) {

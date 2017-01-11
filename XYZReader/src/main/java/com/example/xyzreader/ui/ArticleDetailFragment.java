@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -306,6 +307,10 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
       bylineView.setText("N/A");
       bodyView.setText("N/A");
     }
+
+    if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+     addTransitionName();
+    }
   }
 
   @Override
@@ -376,6 +381,12 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 //    mCursor = null;
 //    bindViews();
 //  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public void addTransitionName(){
+    mPhotoView.setTransitionName(getActivity().getResources().getString(R.string.item_transition)+ " "+mItemId);
+    Log.d(TAG, "addTransitionName: id -> "+mItemId);
+  }
 
   public void animateAppLayoutViewsFromOffset(View view, float value) {
     float scale = (value <= 0.8) ? 0.8f : value;
