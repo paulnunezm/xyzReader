@@ -19,7 +19,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.UpdaterService;
-import com.example.xyzreader.ui.ArticleDetailActivity;
+import com.example.xyzreader.ui.articleDetails.ArticleDetailActivity;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for

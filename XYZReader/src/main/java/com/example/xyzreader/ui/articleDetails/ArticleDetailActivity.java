@@ -1,4 +1,4 @@
-package com.example.xyzreader.ui;
+package com.example.xyzreader.ui.articleDetails;
 
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
