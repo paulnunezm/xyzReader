@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.ActionBar;
@@ -348,6 +349,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     }
 
     bindViews();
+     ActivityCompat.startPostponedEnterTransition(getActivity());
   }
 
   @Override
@@ -385,6 +387,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public void addTransitionName(){
     mPhotoView.setTransitionName(getActivity().getResources().getString(R.string.item_transition)+ " "+mItemId);
+//    getActivity().enter
     Log.d(TAG, "addTransitionName: id -> "+mItemId);
   }
 
