@@ -2,8 +2,6 @@ package com.example.xyzreader.ui.articleList;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
@@ -12,9 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import java.util.ArrayList;
@@ -29,11 +25,19 @@ public class ArticleItemAnimator extends DefaultItemAnimator {
 
   List<ArticlesAdapter.ViewHolder> mViewHolders = new ArrayList<ArticlesAdapter.ViewHolder>();
 
-  private int lastAddAnimatedItem = -2;
-  
+  private int lastAddAnimatedItem = 0;
+
   public ArticleItemAnimator(){
     Log.d(TAG, "ArticleItemAnimator: constructor");
   }
+
+
+
+/**only used for content changing inside the viewholder**/
+//  @Override
+//  public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
+//    return true;
+//  }
 
   @Override
   public void onAddStarting(RecyclerView.ViewHolder item) {
@@ -43,8 +47,27 @@ public class ArticleItemAnimator extends DefaultItemAnimator {
 
   @Override
   public boolean animateAppearance(@NonNull RecyclerView.ViewHolder viewHolder, @Nullable ItemHolderInfo preLayoutInfo, @NonNull ItemHolderInfo postLayoutInfo) {
-    Log.d(TAG, "animateAppearance: ");
+//    Log.d(TAG, "animateAppearance: \nlastAnimItem:"+lastAddAnimatedItem+"\nlayoutPos:"+viewHolder.getLayoutPosition());
+//    if (viewHolder.getLayoutPosition() >= lastAddAnimatedItem) {
+//      lastAddAnimatedItem++;
+
+//    viewHolder.itemView.setAlpha(0);
+      runEnterAnimation((ArticlesAdapter.ViewHolder) viewHolder);
+//      return true;
+//    }
     return true;
+  }
+
+  @Override
+  public boolean animateAdd(RecyclerView.ViewHolder holder) {
+    Log.d(TAG, "animateAdd: ");
+//    if (holder.getLayoutPosition() > lastAddAnimatedItem) {
+      lastAddAnimatedItem++;
+      runEnterAnimation((ArticlesAdapter.ViewHolder) holder);
+//      return false;
+//    }
+
+    return false;
   }
 
   @Override
@@ -60,72 +83,15 @@ public class ArticleItemAnimator extends DefaultItemAnimator {
     return true;
   }
 
-  @Override
-  public void runPendingAnimations() {
-    Log.d(TAG, "runPendingAnimations: ");
-//    super.runPendingAnimations();
-//    if (holder.getLayoutPosition() > lastAddAnimatedItem) {
-//      Log.d(TAG, "animateAdd: "+holder.getLayoutPosition());
-//      lastAddAnimatedItem++;
-//      runEnterAnimation((ArticlesAdapter.ViewHolder) holder);
-//      return false;
-//    }
-//
-//    // Called when we finish animating the holder
-//    dispatchAddFinished(holder);
-    if (!mViewHolders.isEmpty()) {
-      int         animationDuration = 300;
-      AnimatorSet animator;
-      View        target;
-      for (final ArticlesAdapter.ViewHolder viewHolder : mViewHolders) {
-        target = viewHolder.itemView;
-        target.setPivotX(target.getMeasuredWidth() / 2);
-        target.setPivotY(target.getMeasuredHeight() / 2);
-
-        animator = new AnimatorSet();
-
-        animator.playTogether(
-            ObjectAnimator.ofFloat(target, "translationX", -target.getMeasuredWidth(), 0.0f),
-            ObjectAnimator.ofFloat(target, "alpha", target.getAlpha(), 1.0f)
-        );
-
-        animator.setTarget(target);
-        animator.setDuration(animationDuration);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setStartDelay((animationDuration * viewHolder.getPosition()) / 10);
-        animator.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animator) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            mViewHolders.remove(viewHolder);
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animator) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animator) {
-
-          }
-        });
-        animator.start();
-      }
-    }
-  }
 
   private void runEnterAnimation(final ArticlesAdapter.ViewHolder holder) {
     final int screenHeight = getScreenHeight(holder.itemView.getContext());
-    holder.itemView.setTranslationY(screenHeight);
-    holder.itemView.setAlpha(0);
+    holder.itemView.setTranslationY(screenHeight*2);
+//    holder.itemView.setAlpha(0);
     holder.itemView.animate()
         .translationY(0)
-        .setInterpolator(new DecelerateInterpolator(3.f))
+        .setInterpolator(new DecelerateInterpolator(1f))
+        .setStartDelay(26*holder.getLayoutPosition())
         .setDuration(700)
         .alpha(1)
         .setListener(new AnimatorListenerAdapter() {
@@ -136,6 +102,7 @@ public class ArticleItemAnimator extends DefaultItemAnimator {
         })
         .start();
   }
+
 
   /**
    * grabbed from
@@ -153,6 +120,7 @@ public class ArticleItemAnimator extends DefaultItemAnimator {
       screenHeight = size.y;
     }
 
+    Log.i(TAG, "getScreenHeight: "+screenHeight);
     return screenHeight;
   }
 

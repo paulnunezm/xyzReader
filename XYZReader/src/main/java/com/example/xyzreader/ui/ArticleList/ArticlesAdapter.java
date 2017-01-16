@@ -22,25 +22,54 @@ import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.ui.utils.DynamicHeightNetworkImageView;
 import com.example.xyzreader.ui.utils.ImageLoaderHelper;
 
-import static android.content.ContentValues.TAG;
+import java.util.ArrayList;
 
 /**
  * Created by paulnunez on 10/2/16.
  */
 
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
+  private static final String TAG = "ArticlesAdapter";
   private Cursor  mCursor;
+  private ArrayList<Item> articles;
   private Context mContext;
 
-  public ArticlesAdapter(Cursor cursor, Context context) {
-    mCursor = cursor;
+  public ArticlesAdapter(Context context) {
+//    mCursor = cursor;
     mContext = context;
+    articles = new ArrayList<Item>();
+
+
+    Log.d(TAG, "ArticlesAdapter: constructor");
+//
+//    cursor.moveToFirst();
+//    for (int i = 0; i <(cursor.getCount()); i++) {
+//      articles.add(new Item(cursor));
+//      cursor.moveToNext();
+////      notifyDataSetChanged();
+//      notifyItemInserted(i);
+//    }
+//    cursor.moveToFirst();
+  }
+
+  public void setData(Cursor cursor){
+    articles.clear();
+
+    mCursor = cursor;
+    cursor.moveToFirst();
+    for (int i = 0; i <(cursor.getCount()); i++) {
+      articles.add(new Item(cursor));
+      cursor.moveToNext();
+//      notifyDataSetChanged();
+      notifyItemInserted(i);
+    }
   }
 
   @Override
   public long getItemId(int position) {
-    mCursor.moveToPosition(position);
-    return mCursor.getLong(ArticleLoader.Query._ID);
+//    mCursor.moveToPosition(position);
+//    return mCursor.getLong(ArticleLoader.Query._ID);
+    return articles.get(position).id;
   }
 
   @Override
@@ -69,26 +98,35 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
-    mCursor.moveToPosition(position);
-    holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-    holder.subtitleView.setText(
-        DateUtils.getRelativeTimeSpanString(
-            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-            DateUtils.FORMAT_ABBREV_ALL).toString()
-            + " by "
-            + mCursor.getString(ArticleLoader.Query.AUTHOR));
+  public void onBindViewHolder(final ViewHolder holder, int position) {
+//    mCursor.moveToPosition(position);
+//    holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+//    holder.subtitleView.setText(
+//        DateUtils.getRelativeTimeSpanString(
+//            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+//            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+//            DateUtils.FORMAT_ABBREV_ALL).toString()
+//            + " by "
+//            + mCursor.getString(ArticleLoader.Query.AUTHOR));
+//
+//    holder.thumbnailView.setImageUrl(
+//        mCursor.getString(ArticleLoader.Query.THUMB_URL),
+//        ImageLoaderHelper.getInstance(mContext).getImageLoader());
+//    holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
 
-    holder.thumbnailView.setImageUrl(
-        mCursor.getString(ArticleLoader.Query.THUMB_URL),
+
+
+    Item article = articles.get(position);
+
+    holder.titleView.setText(article.getTitle());
+    holder.subtitleView.setText(article.getSubtitle());
+    holder.thumbnailView.setImageUrl(article.getThumbnailUrl(),
         ImageLoaderHelper.getInstance(mContext).getImageLoader());
-    holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+    holder.thumbnailView.setAspectRatio(article.getAspectRatio());
 
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
       setTransitionName(position, holder);
     }
-
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -101,9 +139,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
 
   @Override
   public int getItemCount() {
-    return mCursor.getCount();
+    return articles.size();
   }
-
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
     DynamicHeightNetworkImageView thumbnailView;
@@ -116,6 +153,48 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
       titleView = (TextView) view.findViewById(R.id.article_title);
       subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
     }
+  }
+
+
+
+  private class Item{
+    Integer id;
+    String title;
+    String subtitle;
+    String thumbnailUrl;
+    Float aspectRatio;
+
+    public Item(Cursor cursor){
+      id = cursor.getInt(ArticleLoader.Query._ID);
+      title = cursor.getString(ArticleLoader.Query.TITLE);
+      subtitle = DateUtils.getRelativeTimeSpanString(
+          mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+          System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+          DateUtils.FORMAT_ABBREV_ALL).toString()
+          + " by "
+          + mCursor.getString(ArticleLoader.Query.AUTHOR);
+
+      thumbnailUrl = mCursor.getString(ArticleLoader.Query.THUMB_URL);
+      aspectRatio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
+    }
+
+    public String getTitle() {
+      return title;
+    }
+
+    public String getSubtitle() {
+      return subtitle;
+    }
+
+    public String getThumbnailUrl() {
+      return thumbnailUrl;
+    }
+
+
+    public Float getAspectRatio() {
+      return aspectRatio;
+    }
+
   }
 }
 
