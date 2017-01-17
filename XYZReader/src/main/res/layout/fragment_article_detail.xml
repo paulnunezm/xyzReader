@@ -23,7 +23,7 @@
             android:textColor="@color/ltgray"
             android:textColorLink="@color/theme_accent"
             android:textSize="@dimen/detail_body_text_size"
-            tools:text="lorem"/>
+            tools:text="@string/ipsum"/>
 
     </android.support.v4.widget.NestedScrollView>
 
