@@ -224,7 +224,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 //    bylineView.setMovementMethod(new LinkMovementMethod());
     TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
     mAppBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
-    bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+//    bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
     if (mCursor != null) {
       mRootView.setAlpha(0);
