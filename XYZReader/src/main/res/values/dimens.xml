@@ -9,8 +9,11 @@
 
     <!-- detail -->
     <dimen name="detail_title_text_size">32sp</dimen>
-    <dimen name="detail_body_text_size">22sp</dimen>
-    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+    <dimen name="detail_body_text_size">14sp</dimen>
+    <dimen name="detail_body_text_rl_margin">16dp</dimen>
+    <dimen name="detail_body_text_top_margin">30dp</dimen>
+    <!--<dimen name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</dimen>-->
+    <dimen name="detail_fab_size">40dp</dimen>
 
     <!--list-->
     <dimen name="list_logo_y_translation">10dp</dimen>
