@@ -1,6 +1,5 @@
 package com.example.xyzreader.ui.articleDetails;
 
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -97,8 +96,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     }
 
     mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-//    mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
-//        R.dimen.detail_card_top_margin);
     setHasOptionsMenu(true);
   }
 
@@ -123,52 +120,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
-//    mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
-//        mRootView.findViewById(R.id.draw_insets_frame_layout);
-//    mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
-//      @Override
-//      public void onInsetsChanged(Rect insets) {
-//        mTopInset = insets.top;
-//      }
-//    });
-
-//    mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
-//    mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
-//      @Override
-//      public void onScrollChanged() {
-//        mScrollY = mScrollView.getScrollY();
-//        getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-//        mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
-//        updateStatusBar();
-//      }
-//    });
-
-    mPhotoView = (DynamicHeightNetworkImageView) mRootView.findViewById(R.id.photo);
-//    mPhotoContainerView = mRootView.findViewById(R.id.photo_container);
-
-    mStatusBarColorDrawable = new ColorDrawable(0);
-
-//    mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View view) {
-//        startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-//            .setType("text/plain")
-//            .setText("Some sample text")
-//            .getIntent(), getString(R.string.action_share)));
-//      }
-//    });
-    // intro fab animation
-    shareFab = (FloatingActionButton) mRootView.findViewById(R.id.fab);
-//    shareFab.setScaleY(0);
-//    shareFab.setScaleX(0);
-//    shareFab.animate()
-//        .scaleY(1).scaleX(1)
-//        .setStartDelay(500).setDuration(500);
-
-    ObjectAnimator anim = ObjectAnimator.ofFloat(shareFab, "scale", 0f, 1f);
-    anim.setStartDelay(500);
-    anim.setDuration(500);
-    anim.start();
 
     bindViews();
     updateStatusBar();
@@ -222,26 +173,28 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
       return;
     }
 
-    Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
-    ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
-
-    ActionBar actionBar = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
-    actionBar.setHomeButtonEnabled(true);
-
-    getFragmentManager().addOnBackStackChangedListener(this); // listen to the backstack of the fragment manager
-
-//    mScrollView = (NestedScrollView) mRootView.findViewById(R.id.scrollView);
-//    mScrollView.setOnScrollChangeListener(this);
-
     final CollapsingToolbarLayout collapsingToolbar =
         (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_tool_bar);
     final TextView titleView      = (TextView) mRootView.findViewById(R.id.article_title);
     final View     titleContainer = mRootView.findViewById(R.id.title_container);
     final TextView bylineView     = (TextView) mRootView.findViewById(R.id.article_byline);
-//    bylineView.setMovementMethod(new LinkMovementMethod());
     TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+    Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
+    ActionBar actionBar = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
+
+
+    mPhotoView = (DynamicHeightNetworkImageView) mRootView.findViewById(R.id.photo);
+    mStatusBarColorDrawable = new ColorDrawable(0);
+    shareFab = (FloatingActionButton) mRootView.findViewById(R.id.fab);
     mAppBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
+
+
+    ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
+    actionBar.setDisplayHomeAsUpEnabled(false);
+    actionBar.setHomeButtonEnabled(true);
+
+    getFragmentManager().addOnBackStackChangedListener(this); // listen to the backstack of the fragment manager
+
     mAppBarLayout.addOnOffsetChangedListener(this);
 //    bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
@@ -251,9 +204,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
       mRootView.animate().alpha(1);
       mTitle = mCursor.getString(ArticleLoader.Query.TITLE);
       titleView.setText(mTitle);
-//      titleView.setPivotY((titleView.getHeight()/8);
-//      collapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
-
       collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
       collapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
 
@@ -283,10 +233,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                 int collapsingToolBarScrimColor = p.getMutedColor(getResources()
                     .getColor(R.color.theme_primary));
-//                mPhotoView.setImageBitmap(imageContainer.getBitmap());  // Doesn't work!, why ?
-
-//                mRootView.findViewById(R.id.meta_bar)
-//                    .setBackgroundColor(mMutedColor);
 
                 // Create custom scrim using the muted color.
                 int              alphaColor                     = Color.argb(170, Color.red(mMutedColor), Color.green(mMutedColor), Color.blue(mMutedColor));
@@ -377,32 +323,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     bindViews();
   }
 
-
-//  @Override
-//  public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//    if (!isAdded()) {
-//      if (cursor != null) {
-//        cursor.close();
-//      }
-//      return;
-//    }
-//
-//    mCursor = cursor;
-//    if (mCursor != null && !mCursor.moveToFirst()) {
-//      Log.e(TAG, "Error reading item detail cursor");
-//      mCursor.close();
-//      mCursor = null;
-//    }
-//
-//    bindViews();
-//  }
-
-//  @Override
-//  public void onLoaderReset(Loader<Cursor> cursorLoader) {
-//    mCursor = null;
-//    bindViews();
-//  }
-
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public void addTransitionName(){
     mPhotoView.setTransitionName(getActivity().getResources().getString(R.string.item_transition)+ " "+mItemId);
@@ -432,28 +352,15 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 
   @Override
   public void onBackStackChanged() {
-    Log.d(TAG, "onBackStackChanged: ");
     ((AppCompatActivity) getActivity()).onSupportNavigateUp();
   }
 
   @Override
   public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-    Log.d(TAG, "onOffsetChanged: "+verticalOffset);
     if(verticalOffset <= -100){
       shareFab.hide();
     }else{
       shareFab.show();
     }
   }
-
-//  @Override
-//  public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//    Log.d(TAG, "onScrollChange: "+scrollY);
-//    if (scrollY > oldScrollY) {
-//      shareFab.hide();
-//    }
-//    if (scrollY < oldScrollY) {
-//      shareFab.show();
-//    }
-//  }
 }
