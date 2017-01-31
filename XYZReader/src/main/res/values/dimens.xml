@@ -1,7 +1,7 @@
 <resources>
 
     <!-- common -->
-    <dimen name="text_size_body1">14sp</dimen>
+    <dimen name="text_size_body1">18sp</dimen>
     <dimen name="text_size_caption">12sp</dimen>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
