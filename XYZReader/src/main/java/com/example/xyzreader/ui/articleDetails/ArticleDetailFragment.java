@@ -122,7 +122,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
     bindViews();
-    updateStatusBar();
+//    updateStatusBar();
     return mRootView;
   }
 
@@ -180,7 +180,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     final TextView bylineView     = (TextView) mRootView.findViewById(R.id.article_byline);
     TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
     Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
-    ActionBar actionBar = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
 
 
     mPhotoView = (DynamicHeightNetworkImageView) mRootView.findViewById(R.id.photo);
@@ -188,9 +187,9 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     shareFab = (FloatingActionButton) mRootView.findViewById(R.id.fab);
     mAppBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
 
-
     ((ArticleDetailActivity) getActivity()).setSupportActionBar(toolbar);
-    actionBar.setDisplayHomeAsUpEnabled(false);
+    ActionBar actionBar = ((ArticleDetailActivity) getActivity()).getSupportActionBar();
+    actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeButtonEnabled(true);
 
     getFragmentManager().addOnBackStackChangedListener(this); // listen to the backstack of the fragment manager
