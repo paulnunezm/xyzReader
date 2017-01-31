@@ -1,6 +1,7 @@
 package com.example.xyzreader.ui.articleDetails;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -64,6 +65,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
   private NestedScrollView  mScrollView;
   private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
   private ColorDrawable         mStatusBarColorDrawable;
+  private TextView titleView;
 
   private int                           mTopInset;
   private View                          mPhotoContainerView;
@@ -123,6 +125,18 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 
     bindViews();
 //    updateStatusBar();
+
+    shareFab.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.msg_shared_with));
+        intent.putExtra(Intent.EXTRA_TEXT, titleView.getText());
+        intent.setType("text/plain");
+        getActivity().startActivity(intent);
+      }
+    });
+
     return mRootView;
   }
 
@@ -175,13 +189,13 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 
     final CollapsingToolbarLayout collapsingToolbar =
         (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_tool_bar);
-    final TextView titleView      = (TextView) mRootView.findViewById(R.id.article_title);
     final View     titleContainer = mRootView.findViewById(R.id.title_container);
     final TextView bylineView     = (TextView) mRootView.findViewById(R.id.article_byline);
     TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
     Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
 
 
+    titleView      = (TextView) mRootView.findViewById(R.id.article_title);
     mPhotoView = (DynamicHeightNetworkImageView) mRootView.findViewById(R.id.photo);
     mStatusBarColorDrawable = new ColorDrawable(0);
     shareFab = (FloatingActionButton) mRootView.findViewById(R.id.fab);
