@@ -2,6 +2,7 @@ package com.example.xyzreader.ui.articleDetails;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -255,6 +256,16 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
                 mRootView.findViewById(R.id.meta_scrim).setBackground(gd);
                 collapsingToolbar.setContentScrim(collapsingToolBarScrimDrawable);
 
+                int fabColor = 0;
+                if(p.getDarkVibrantSwatch() != null){
+                   fabColor = p.getLightVibrantColor(R.color.theme_primary);
+                  shareFab.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{0}}, new int[]{fabColor}));
+                }else{
+                  if(p.getLightMutedSwatch() != null){
+                    fabColor = p.getLightMutedColor(R.color.theme_primary);
+                    shareFab.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{0}}, new int[]{fabColor}));
+                  }
+                }
 //                updateStatusBar();
               }
             }
