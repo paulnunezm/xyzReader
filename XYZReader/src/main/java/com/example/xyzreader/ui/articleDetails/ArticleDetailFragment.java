@@ -1,19 +1,21 @@
 package com.example.xyzreader.ui.articleDetails;
 
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -37,17 +39,17 @@ import com.example.xyzreader.ui.articleList.ArticleListActivity;
 import com.example.xyzreader.ui.utils.DrawInsetsFrameLayout;
 import com.example.xyzreader.ui.utils.DynamicHeightNetworkImageView;
 import com.example.xyzreader.ui.utils.ImageLoaderHelper;
-import com.example.xyzreader.ui.utils.ObservableScrollView;
 
 import static android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
- * either contained in a {@link ArticleListActivity} in two-pane mode (on
+ * either contained in a {@link ArticleListActivity } in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends android.support.v4.app.Fragment implements
-    LoaderManager.LoaderCallbacks<Cursor>, FragmentManager.OnBackStackChangedListener {
+    LoaderManager.LoaderCallbacks<Cursor>, FragmentManager.OnBackStackChangedListener,
+    AppBarLayout.OnOffsetChangedListener{
   private static final String TAG = "ArticleDetailFragment";
 
   public static final  String ARG_ITEM_ID     = "item_id";
@@ -59,7 +61,8 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
   private int mMutedColor = 0xFF333333;
   private String                mTitle;
   private AppBarLayout          mAppBarLayout;
-  private ObservableScrollView  mScrollView;
+  private FloatingActionButton shareFab;
+  private NestedScrollView  mScrollView;
   private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
   private ColorDrawable         mStatusBarColorDrawable;
 
@@ -94,8 +97,8 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     }
 
     mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-    mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
-        R.dimen.detail_card_top_margin);
+//    mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
+//        R.dimen.detail_card_top_margin);
     setHasOptionsMenu(true);
   }
 
@@ -154,6 +157,18 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 //            .getIntent(), getString(R.string.action_share)));
 //      }
 //    });
+    // intro fab animation
+    shareFab = (FloatingActionButton) mRootView.findViewById(R.id.fab);
+//    shareFab.setScaleY(0);
+//    shareFab.setScaleX(0);
+//    shareFab.animate()
+//        .scaleY(1).scaleX(1)
+//        .setStartDelay(500).setDuration(500);
+
+    ObjectAnimator anim = ObjectAnimator.ofFloat(shareFab, "scale", 0f, 1f);
+    anim.setStartDelay(500);
+    anim.setDuration(500);
+    anim.start();
 
     bindViews();
     updateStatusBar();
@@ -216,6 +231,9 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 
     getFragmentManager().addOnBackStackChangedListener(this); // listen to the backstack of the fragment manager
 
+//    mScrollView = (NestedScrollView) mRootView.findViewById(R.id.scrollView);
+//    mScrollView.setOnScrollChangeListener(this);
+
     final CollapsingToolbarLayout collapsingToolbar =
         (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_tool_bar);
     final TextView titleView      = (TextView) mRootView.findViewById(R.id.article_title);
@@ -224,6 +242,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 //    bylineView.setMovementMethod(new LinkMovementMethod());
     TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
     mAppBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
+    mAppBarLayout.addOnOffsetChangedListener(this);
 //    bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
     if (mCursor != null) {
@@ -416,4 +435,25 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     Log.d(TAG, "onBackStackChanged: ");
     ((AppCompatActivity) getActivity()).onSupportNavigateUp();
   }
+
+  @Override
+  public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+    Log.d(TAG, "onOffsetChanged: "+verticalOffset);
+    if(verticalOffset <= -100){
+      shareFab.hide();
+    }else{
+      shareFab.show();
+    }
+  }
+
+//  @Override
+//  public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//    Log.d(TAG, "onScrollChange: "+scrollY);
+//    if (scrollY > oldScrollY) {
+//      shareFab.hide();
+//    }
+//    if (scrollY < oldScrollY) {
+//      shareFab.show();
+//    }
+//  }
 }
