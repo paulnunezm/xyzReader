@@ -1,12 +1,5 @@
 ## XYZ Reader
-This is a movies feed reader application for the Android Developer Nanodegree Course in which
-was needed an app redesign and make it follow the Material Design guidelines while translating a set
-of static design mocks to a living and breathing app.
-
-###This project covers:
-- Apply the learned understanding of Android design.
-- Apply Material Design guidelines the application.
-- Effectively use transitions and motion.
+In this project I've transformed the user experience of a news reading app using Material Design principles. This includes consistent and meaningful use of Material Design UI components, fonts, color, motion and surfaces.
 
 ### Finished app:
 ![1](/screenshots/intro_animation.gif?raw=true)
